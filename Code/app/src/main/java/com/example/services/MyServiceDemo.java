@@ -28,7 +28,6 @@ public class MyServiceDemo extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: "+Thread.currentThread().getId());
-        stopSelf();//used to stop the Service.
         return super.onStartCommand(intent, flags, startId);
     }
 

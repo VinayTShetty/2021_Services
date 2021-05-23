@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopService(View view) {
         Log.d(TAG, "stopService: ");
-          //  stopService(serviceIntent);
+            stopService(serviceIntent);
     }
 }
 
