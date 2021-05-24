@@ -128,6 +128,13 @@ Implementation of a Service Connection API to the component which wants to conne
                 }
             };
 
+
+
+Test cases:-
+------------
+1)Component can bind to the Service,even though service has not started.
+2)We cannot stop the Bound Service
+
 */
 
 

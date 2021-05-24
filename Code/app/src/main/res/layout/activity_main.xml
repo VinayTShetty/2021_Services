@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Bind Service"
-        android:layout_below="@+id/start_service_button_id"
+        android:layout_below="@+id/stop_service_button_id"
         android:layout_margin="15dp"
         android:onClick="bindService"
         >
