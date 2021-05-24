@@ -15,7 +15,7 @@
         android:layout_margin="10dp"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:text="23"
+        android:text=""
         android:textAlignment="center"
         android:gravity="center_horizontal">
     </TextView>
