@@ -44,4 +44,16 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
-//Notes link:-https://drive.google.com/drive/folders/1j8WkvIWXHNVFSp1dNl0i7hCj1fHrDep-?usp=sharing
+/*
+Notes Link
+https://docs.google.com/document/d/1it6NAM5izAovZzufaKGVemZ884ibT730QsDJOfFOrCs/edit#heading=h.tqrsf9imesev
+*/
+
+/*
+Binding a Service to Activity to get a Number
+----------------------------------------------
+1)Service needs to implements onBind which return IBinder.
+2)Activity will use Service Connection API to connect to the Service.
+*/
+
+
