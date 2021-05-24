@@ -133,8 +133,22 @@ Implementation of a Service Connection API to the component which wants to conne
 Test cases:-
 ------------
 1)Component can bind to the Service,even though service has not started.
-2)We cannot stop the Bound Service
+2)We cannot stop the Bound Service using stopSelf/stopService(serviceInent).
+  Bound Service will stop when all the components will unbind from the Service.
+3)We can Bind the Component to the service only once,once bound clicking on Bind Service again and again will have no effect.
+ Component will not bind again and again once if its bounded.
 
+
+ Bound Service Behaviour:-
+ ------------------------
+
+1)Components can bind to StartedService,UnStarted Service,Stopped Service
+2)Any number of components can bind to the service
+3)Bound Service cannot be destroyed(exception resource crunch)
+4)Note:-***
+ If stop Service is called while service was bound,it will stopped automatically,when all the components from the service are unbound.
+5)components which can bound to the service are
+    Activity,Service,Content Provider(BroadCast Reciever cannot be used to bound to the service)
 */
 
 
