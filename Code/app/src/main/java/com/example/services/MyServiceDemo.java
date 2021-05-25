@@ -26,7 +26,8 @@ public class MyServiceDemo extends IntentService {
 
 
     /**
-     * By defualt it
+     * By defualt IntentService will generate the one Argument constructor.
+     * So i have changed the one Argument Constructor  to zero Argument constructor.
      */
     public MyServiceDemo() {
         super(MyServiceDemo.class.getSimpleName());
