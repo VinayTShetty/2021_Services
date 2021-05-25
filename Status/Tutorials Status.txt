@@ -13,3 +13,5 @@ Video 8               NO                        25/05/2021(Remote Binding)
 Video 9               NO                        25/05/2021(Remote Binding)
 Video 10              NO                        25/05/2021(Remote Binding)
 Video 11              YES                       25/05/2021
+Video 12              YES                       25/05/2021
+Video 13              YES                       25/05/2021

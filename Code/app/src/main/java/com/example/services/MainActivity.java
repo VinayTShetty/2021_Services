@@ -152,9 +152,13 @@ Test cases:-
 
 
 
------------------------------------------------------------------|
-Bound Service with Respect to Intent Service Demo In this Commit |
------------------------------------------------------------------|
+-----------------------------------------------------------------
+Bound Service with Respect to Intent Service Demo In this Commit
+
+DisAdvantage:-
+In Case of Intent Service,If we put the application back to the background.
+It will stop after a while.So overCome this scenario we will follow differet approoach.
+-----------------------------------------------------------------
 
 
 */
