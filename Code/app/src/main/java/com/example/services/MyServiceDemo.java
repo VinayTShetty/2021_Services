@@ -42,9 +42,11 @@ public class MyServiceDemo extends Service {
         new Thread(new Runnable() {  // using a different Thread because service by default will run on the main Thread.So avoid ANR using different thread.
             @Override
             public void run() {
-                startRandomNumberGenerator();
+                //startRandomNumberGenerator();
             }
         }).start();
+
+        startRandomNumberGenerator();
         return START_STICKY;
     }
 
