@@ -1,78 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-
-    <TextView
-        android:id="@+id/random_number_TextView_Id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
-        android:text=""
-        android:textAlignment="center"
-        android:gravity="center_horizontal">
-    </TextView>
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/start_service_button_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="Start Service"
-        android:textAllCaps="false"
         android:onClick="startService"
-        android:layout_below="@+id/random_number_TextView_Id"
-        >
-    </androidx.appcompat.widget.AppCompatButton>
-
+        android:text="Start Service"
+        android:textAllCaps="false"></androidx.appcompat.widget.AppCompatButton>
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/stop_service_button_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stop Service"
         android:layout_below="@+id/start_service_button_id"
         android:layout_margin="15dp"
         android:onClick="stopService"
-        >
-    </androidx.appcompat.widget.AppCompatButton>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/bind_service_button_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bind Service"
-        android:layout_below="@+id/stop_service_button_id"
-        android:layout_margin="15dp"
-        android:onClick="bindService"
-        >
-    </androidx.appcompat.widget.AppCompatButton>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/unbind_service_button_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="UnBind  Service"
-        android:layout_below="@+id/bind_service_button_id"
-        android:layout_margin="15dp"
-        android:onClick="unBindService"
-        >
-    </androidx.appcompat.widget.AppCompatButton>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/get_random_Number_button_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Get Random Number"
-        android:layout_below="@+id/unbind_service_button_id"
-        android:layout_margin="15dp"
-        android:onClick="getRandomNumber"
-        >
-    </androidx.appcompat.widget.AppCompatButton>
-
+        android:text="Stop Service"></androidx.appcompat.widget.AppCompatButton>
 </RelativeLayout>

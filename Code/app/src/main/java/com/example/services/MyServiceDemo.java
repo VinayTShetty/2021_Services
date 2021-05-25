@@ -1,5 +1,6 @@
 package com.example.services;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -10,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Random;
 
-public class MyServiceDemo extends Service {
+public class MyServiceDemo extends IntentService {
 
 
     private static final String APPLICATION_TAG=MyServiceDemo.class.getSimpleName();
@@ -25,54 +26,31 @@ public class MyServiceDemo extends Service {
 
 
     /**
-     *This method is depricated.
+     * By defualt it
      */
+    public MyServiceDemo() {
+        super(MyServiceDemo.class.getSimpleName());
+    }
+
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
     }
 
-    /**
-     * This method will get executed when ever we start the Service.
-     */
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG,"In onStartCommend, thread id: "+Thread.currentThread().getId());
-        mIsRandomGeneratorOn =true;
-        new Thread(new Runnable() {  // using a different Thread because service by default will run on the main Thread.So avoid ANR using different thread.
-            @Override
-            public void run() {
-                //startRandomNumberGenerator();
-            }
-        }).start();
-
-        startRandomNumberGenerator();
-        return START_STICKY;
-    }
-
-    /**
-     * Main Part.
-     * Implementing onBind Method,which will return Ibinder interface.
-     * Pre-Requisites
-     * --------------
-     * 1)Create a class which extends Binder
-     * 2)OverRide a method getService which return service instance.
-     * 3)Create a IBinder instance intializing a class that extends Binder.(i.e )-->{ private IBinder mBinder=new MyServiceBinder(); }
-     * 4)Return IBinder instance variable to onBind method.
-     */
-
-    class  MyServiceBinder extends Binder{ // Binder is in abstract class.so we can eiether implement or extend the Binder class.
-        public MyServiceDemo getService(){
-           return MyServiceDemo.this;
-        }
-    }
-
-    private IBinder mBinder=new MyServiceBinder();
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return null;
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        /**
+         * By default it will run on the different Thread.
+         */
+        mIsRandomGeneratorOn=true;
+        startRandomNumberGenerator();
     }
 
     @Override
@@ -85,10 +63,10 @@ public class MyServiceDemo extends Service {
     private void startRandomNumberGenerator(){
         while (mIsRandomGeneratorOn){
             try{
-                Thread.sleep(1000); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
+                Thread.sleep(100); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
                 if(mIsRandomGeneratorOn){
                     mRandomNumber =new Random().nextInt(MAX)+MIN;
-                    Log.d(TAG,"Thread id: "+Thread.currentThread().getId()+", Random Number: "+ mRandomNumber);
+                    Log.d(TAG,", Random Number: "+ mRandomNumber+" Thread Id= "+Thread.currentThread().getId());
                 }
             }catch (InterruptedException e){
                 Log.d(TAG,"Thread Interrupted");
