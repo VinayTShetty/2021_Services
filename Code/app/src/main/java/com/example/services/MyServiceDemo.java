@@ -24,33 +24,31 @@ public class MyServiceDemo extends IntentService {
     private final int MIN=0;
     private final int MAX=100;
 
-
-    /**
-     * By defualt IntentService will generate the one Argument constructor.
-     * So i have changed the one Argument Constructor  to zero Argument constructor.
-     */
     public MyServiceDemo() {
         super(MyServiceDemo.class.getSimpleName());
     }
-
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
     }
 
+    class  MyServiceBinder extends Binder{ // Binder is in abstract class.so we can eiether implement or extend the Binder class.
+        public MyServiceDemo getService(){
+            return MyServiceDemo.this;
+        }
+    }
+
+    private IBinder mBinder=new MyServiceBinder();
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        /**
-         * By default it will run on the different Thread.
-         */
-        mIsRandomGeneratorOn=true;
+        mIsRandomGeneratorOn =true;
         startRandomNumberGenerator();
     }
 
@@ -64,10 +62,10 @@ public class MyServiceDemo extends IntentService {
     private void startRandomNumberGenerator(){
         while (mIsRandomGeneratorOn){
             try{
-                Thread.sleep(100); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
+                Thread.sleep(1000); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
                 if(mIsRandomGeneratorOn){
                     mRandomNumber =new Random().nextInt(MAX)+MIN;
-                    Log.d(TAG,", Random Number: "+ mRandomNumber+" Thread Id= "+Thread.currentThread().getId());
+                    Log.d(TAG,"Thread id: "+Thread.currentThread().getId()+", Random Number: "+ mRandomNumber);
                 }
             }catch (InterruptedException e){
                 Log.d(TAG,"Thread Interrupted");
