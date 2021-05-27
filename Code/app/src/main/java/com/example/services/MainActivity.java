@@ -19,10 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String COMMON_TAG="COMMON_TAG "+APPLICATION_TAG;
     private static final String TAG=COMMON_TAG;
-    private  MyServiceDemo myServiceDemo;
-    private  boolean isServiceBound;
-    private ServiceConnection serviceConnection;
-
     /**
      * Android always recomends to use explicit intent to start the Service.
      */
@@ -47,46 +43,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void startService(View view) {
         Log.d(TAG, "startService: Thread ID= "+Thread.currentThread().getId());
-        startService(serviceIntent);
+        /**
+         * We cannot start the service using startService() method as usual we have call invoke enquqeuqe method.
+         */
+        MyServiceDemo.enqueQueWork_loc(this,serviceIntent);
+
     }
 
     public void stopService(View view) {
         Log.d(TAG, "stopService: ");
         stopService(serviceIntent);
-    }
-
-    public void bindService(View view) {
-        if(serviceConnection==null){
-            serviceConnection=new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder binder) {
-                    MyServiceDemo.MyServiceBinder myServiceBinder =(MyServiceDemo.MyServiceBinder)binder;
-                    myServiceDemo=myServiceBinder.getService();
-                    isServiceBound=true;
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    isServiceBound=false;
-                }
-            };
-            bindService(serviceIntent,serviceConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
-    public void unBindService(View view) {
-        if(isServiceBound){
-            unbindService(serviceConnection);
-            isServiceBound=false;
-        }
-    }
-
-    public void getRandomNumber(View view) {
-        if(isServiceBound){
-            random_number_TextView.setText("Random Number= "+myServiceDemo.getRandomNumber());
-        }else {
-            random_number_TextView.setText("Service is Not Bounded");
-        }
     }
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.services">
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +17,8 @@
             </intent-filter>
         </activity>
         <!--Declaring the Service in the manifest file-->
-        <service android:name=".MyServiceDemo"/>
+        <service android:name=".MyServiceDemo"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            />
     </application>
 </manifest>
