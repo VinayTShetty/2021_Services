@@ -34,7 +34,7 @@ public class MyServiceDemo extends JobIntentService {
     }
 
     public static void enqueQueWork_loc(Context context,Intent intent){
-            enqueueWork(context,MyServiceDemo.class,JOB_ID,intent);
+            enqueueWork(context,MyServiceDemo.class,JOB_ID++,intent);
     }
 
     @Override
