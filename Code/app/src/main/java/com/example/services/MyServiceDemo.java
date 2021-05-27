@@ -22,7 +22,6 @@ public class MyServiceDemo extends JobIntentService {
     private static final String TAG=COMMON_TAG;
 
     private int mRandomNumber;
-    private boolean mIsRandomGeneratorOn;
 
     private final int MIN=0;
     private final int MAX=100;
@@ -30,9 +29,8 @@ public class MyServiceDemo extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        mIsRandomGeneratorOn=true;
-        startRandomNumberGenerator();
         Log.d(TAG, "onHandleWork: Thread Id= "+Thread.currentThread().getId());
+        startRandomNumberGenerator(intent.getIntExtra(getResources().getString(R.string.COUNT_TAG),-1));
     }
 
     public static void enqueQueWork_loc(Context context,Intent intent){
@@ -48,28 +46,27 @@ public class MyServiceDemo extends JobIntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopRandomNumberGenerator();
         Log.d(TAG,"Service Destroyed");
     }
 
 
-    private void startRandomNumberGenerator(){
-        while (mIsRandomGeneratorOn){
+    private void startRandomNumberGenerator(int countWork){
+        for (int i = 0; i <5; i++) {
             try{
-                Thread.sleep(1000); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
-                if(mIsRandomGeneratorOn){
-                    mRandomNumber =new Random().nextInt(MAX)+MIN;
-                    Log.d(TAG,"startRandomNumberGenerator Thread id: "+Thread.currentThread().getId()+", Random Number: "+ mRandomNumber);
+                if(isStopped()){
+                    Log.d(TAG, "startRandomNumberGenerator: ServiceStooped In Middle "+isStopped());
+                    return;
                 }
+                Thread.sleep(1000); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
+                mRandomNumber =new Random().nextInt(MAX)+MIN;
+                Log.d(TAG,"startRandomNumberGenerator Thread id: "+Thread.currentThread().getId()+", Random Number: "+ mRandomNumber+" Count Work= "+countWork);
+
             }catch (InterruptedException e){
                 Log.d(TAG,"Thread Interrupted");
             }
-
         }
-    }
-
-    private void stopRandomNumberGenerator(){
-        mIsRandomGeneratorOn =false;
+        stopSelf();
+        Log.d(TAG, "startRandomNumberGenerator: ServiceStopped Thread Id= "+Thread.currentThread().getId());
     }
 
     public int getRandomNumber(){

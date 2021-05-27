@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private Intent serviceIntent;
     TextView random_number_TextView;
-
+    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
         /**
          * We cannot start the service using startService() method as usual we have call invoke enquqeuqe method.
          */
+        serviceIntent.putExtra(getResources().getString(R.string.COUNT_TAG),++count);
         MyServiceDemo.enqueQueWork_loc(this,serviceIntent);
 
     }
 
     public void stopService(View view) {
-        Log.d(TAG, "stopService: ");
-        stopService(serviceIntent);
+        Toast.makeText(this,"Job Intent Service Cannot be Stop Explicitly",Toast.LENGTH_SHORT).show();
     }
 }
 
@@ -63,75 +64,16 @@ https://docs.google.com/document/d/1it6NAM5izAovZzufaKGVemZ884ibT730QsDJOfFOrCs/
 */
 
 /*
-Binding a Service to Activity to get a Number
-----------------------------------------------
-1)Service needs to implements onBind which return IBinder.
-2)Activity will use Service Connection API to connect to the Service.
+JobIntent Service Test Cases
+----------------------------
+
+1)
+   a)JobIntentService should be stopped by usig stopSelf()
+   b)OS needs to stop it due to some resource crunch situation.
+   c)Assigned Work is finished
+
+2)If Service is stoped depending on the return type of onStopCurrentWork the service will reschedule
 
 
-Implementation of a Service Connection API to the component which wants to connect to the service
--------------------------------------------------------------------------------------------------
-1)Create a instance of the Service class.
-2)Use  a ServiceConnection by intializing it as inner class by overRiding two methods.
-    1)onServiceConnected
-    2)onServiceDisconnected
-3)Intialize the instance of the Service class which was created.
-    Note:-Intialize in the onServiceConnected method using the IBinder variable reference.
-          MyServiceDemo.MyServiceBinder myServiceBinder =(MyServiceDemo.MyServiceBinder)binder;
-          myServiceDemo=myServiceBinder.getService();
-4)user predefined method bindService() method to bind to the service.
-        parameters needs to be passed to the bindService() are bindService( serviceintent,serviceConnection,BIND_AUTO_CREATE)
-
-      serviceConnection=new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-
-                }
-            };
-
-
-
-Test cases:-
-------------
-1)Component can bind to the Service,even though service has not started.
-2)We cannot stop the Bound Service using stopSelf/stopService(serviceInent).
-  Bound Service will stop when all the components will unbind from the Service.
-3)We can Bind the Component to the service only once,once bound clicking on Bind Service again and again will have no effect.
- Component will not bind again and again once if its bounded.
-
-
- Bound Service Behaviour:-
- ------------------------
-
-1)Components can bind to StartedService,UnStarted Service,Stopped Service
-2)Any number of components can bind to the service
-3)Bound Service cannot be destroyed(exception resource crunch)
-4)Note:-***
- If stop Service is called while service was bound,it will stopped automatically,when all the components from the service are unbound.
-5)components which can bound to the service are
-    Activity,Service,Content Provider(BroadCast Reciever cannot be used to bound to the service)
-
-
-
------------------------------------------------------------------
-Bound Service with Respect to Intent Service Demo In this Commit
-
-DisAdvantage:-
-In Case of Intent Service,If we put the application back to the background.
-It will stop after a while.So overCome this scenario we will follow differet approoach.
------------------------------------------------------------------
-
-OverCome Service getting Killed in ForeGround
-*********************************************
-By Using Intent Service the application will get killed when its placed in the forground.
-
-----------------------------------------------
 
 */
-
-
