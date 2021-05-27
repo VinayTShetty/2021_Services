@@ -17,4 +17,5 @@ Video 12              YES                       25/05/2021
 Video 13              YES                       25/05/2021(Intent Service Background limitation added few points.)
 Video 14              YES                       25/05/2021(Job Intent Service)
 Video 15              YES                       27/05/2021(Job Intent Service) Test Cases.
-Video 16              NO                       27/05/2021(JobScheduler)
+Video 16              YES                       27/05/2021(JobScheduler) Points added in the Google Docs.
+Video 17              YES                       27/05/2021(JobScheduler) Implementation.(Running a service in the Background)

@@ -1,17 +1,16 @@
 package com.example.services;
-
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,15 +22,24 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Android always recomends to use explicit intent to start the Service.
      */
-    private Intent serviceIntent;
+   // private Intent serviceIntent;
     TextView random_number_TextView;
-    int count=0;
+    JobScheduler jobScheduler;
+    private int JOB_ID=101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intializeService();
+       // intializeService();
         intiazeViews();
+        intializeJobScheduler();
+    }
+
+    private void intializeJobScheduler() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            jobScheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
+        }
     }
 
     private void intiazeViews() {
@@ -39,21 +47,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void intializeService() {
-        serviceIntent=new Intent(this,MyServiceDemo.class);
+     //   serviceIntent=new Intent(this,MyServiceDemo.class);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void startService(View view) {
         Log.d(TAG, "startService: Thread ID= "+Thread.currentThread().getId());
-        /**
-         * We cannot start the service using startService() method as usual we have call invoke enquqeuqe method.
-         */
-        serviceIntent.putExtra(getResources().getString(R.string.COUNT_TAG),++count);
-        MyServiceDemo.enqueQueWork_loc(this,serviceIntent);
-
+        startJob();
     }
 
     public void stopService(View view) {
-        Toast.makeText(this,"Job Intent Service Cannot be Stop Explicitly",Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "stopService: Thread ID= "+Thread.currentThread().getId());
+        stopJob();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void startJob(){
+        ComponentName componentName = new ComponentName(this, MyServiceDemo.class);
+        JobInfo jobInfo = new JobInfo.Builder(JOB_ID,componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_CELLULAR)
+                .setPeriodic(15*60*1000)
+                .setRequiresCharging(false)
+                .setPersisted(true)
+                .build();
+
+        if(jobScheduler.schedule(jobInfo)==JobScheduler.RESULT_SUCCESS){
+            Log.d(TAG, "MainActivity thread id: " + Thread.currentThread().getId()+", job successfully scheduled");
+        }else {
+            Log.d(TAG, "MainActivity thread id: " + Thread.currentThread().getId()+", job could not be scheduled");
+        }
+    }
+
+
+    private void stopJob(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            jobScheduler.cancel(JOB_ID);
+        }
     }
 }
 
@@ -64,17 +93,9 @@ https://docs.google.com/document/d/1it6NAM5izAovZzufaKGVemZ884ibT730QsDJOfFOrCs/
 */
 
 /*
-JobIntent Service Test Cases
-----------------------------
+JobScheduler/JobService
 
-1)
-   a)JobIntentService should be stopped by usig stopSelf()
-   b)OS needs to stop it due to some resource crunch situation.
-   c)Assigned Work is finished
-
-2)If Service is stoped depending on the return type of onStopCurrentWork the service will reschedule
-
-3)JobIntentService will run in the background after if the applciation is closed.
-    Therefore,Choosing a JobIntentService for running a task in the backgroud is not good approach..
-
+1)onStartJob method will get called as soon as the service gets called.
+2)Add BIND_JOB_SERVICE to the Manifest file for the Service Tag.
+3)When we stop the service explicity by calling (jobScheduler.cancel(JOB_ID)) it wont reschedule again.
 */
