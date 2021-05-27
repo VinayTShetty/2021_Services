@@ -74,6 +74,7 @@ JobIntent Service Test Cases
 
 2)If Service is stoped depending on the return type of onStopCurrentWork the service will reschedule
 
-
+3)JobIntentService will run in the background after if the applciation is closed.
+    Therefore,Choosing a JobIntentService for running a task in the backgroud is not good approach..
 
 */
