@@ -160,6 +160,11 @@ In Case of Intent Service,If we put the application back to the background.
 It will stop after a while.So overCome this scenario we will follow differet approoach.
 -----------------------------------------------------------------
 
+OverCome Service getting Killed in ForeGround
+*********************************************
+By Using Intent Service the application will get killed when its placed in the forground.
+
+----------------------------------------------
 
 */
 
