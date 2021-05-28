@@ -36,4 +36,13 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    /**
+     * Added Depedency for work Manager
+     * link:-https://developer.android.com/jetpack/androidx/releases/work#groovy
+     */
+    def work_version = "2.5.0"
+    // (Java only)
+    implementation "androidx.work:work-runtime:$work_version"
+
 }
