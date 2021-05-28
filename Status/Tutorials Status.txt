@@ -19,3 +19,5 @@ Video 14              YES                       25/05/2021(Job Intent Service)
 Video 15              YES                       27/05/2021(Job Intent Service) Test Cases.
 Video 16              YES                       27/05/2021(JobScheduler) Points added in the Google Docs.
 Video 17              YES                       27/05/2021(JobScheduler) Implementation.(Running a service in the Background)
+Video 18              YES                       27/05/2021(JobScheduler) Implementation.(Stoping the Service after a particular logic is completed.)
+Video 19              YES                       27/05/2021(ForeGround Service)

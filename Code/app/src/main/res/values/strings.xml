@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Services</string>
     <string name="COUNT_TAG">count</string>
+    <string name="channelId">123</string>
 </resources>

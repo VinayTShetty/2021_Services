@@ -1,6 +1,7 @@
 package com.example.services;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -22,61 +23,28 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Android always recomends to use explicit intent to start the Service.
      */
-    TextView random_number_TextView;
-    JobScheduler jobScheduler;
-    private int JOB_ID=101;
+    Intent serviceDemoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        intiazeViews();
-        intializeJobScheduler();
+        intializeServiceIntent();
     }
 
-    private void intializeJobScheduler() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            jobScheduler = (JobScheduler)getSystemService(JOB_SCHEDULER_SERVICE);
-        }
-    }
-
-    private void intiazeViews() {
-        random_number_TextView=(TextView)findViewById(R.id.random_number_TextView_Id);
+    private void intializeServiceIntent() {
+        serviceDemoIntent=new Intent(this,MyServiceDemo.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void startService(View view) {
         Log.d(TAG, "startService: Thread ID= "+Thread.currentThread().getId());
-        startJob();
+        ContextCompat.startForegroundService(this,serviceDemoIntent);
     }
 
     public void stopService(View view) {
         Log.d(TAG, "stopService: Thread ID= "+Thread.currentThread().getId());
-        stopJob();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void startJob(){
-        ComponentName componentName = new ComponentName(this, MyServiceDemo.class);
-        JobInfo jobInfo = new JobInfo.Builder(JOB_ID,componentName)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_CELLULAR)
-                .setPeriodic(15*60*1000)
-                .setRequiresCharging(false)
-                .setPersisted(true)
-                .build();
-
-        if(jobScheduler.schedule(jobInfo)==JobScheduler.RESULT_SUCCESS){
-            Log.d(TAG, "MainActivity thread id: " + Thread.currentThread().getId()+", job successfully scheduled");
-        }else {
-            Log.d(TAG, "MainActivity thread id: " + Thread.currentThread().getId()+", job could not be scheduled");
-        }
-    }
-
-
-    private void stopJob(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            jobScheduler.cancel(JOB_ID);
-        }
+        stopService(serviceDemoIntent);
     }
 }
 
@@ -87,11 +55,36 @@ https://docs.google.com/document/d/1it6NAM5izAovZzufaKGVemZ884ibT730QsDJOfFOrCs/
 */
 
 /*
-JobScheduler/JobService
+ForeGround Service:-
+====================
 
-1)onStartJob method will get called as soon as the service gets called.
-2)Add BIND_JOB_SERVICE to the Manifest file for the Service Tag.
-3)When we stop the service explicity by calling (jobScheduler.cancel(JOB_ID)) it wont reschedule again.
-4)Stopping the JobScheduler after a running a particular at task.
+1)
+In JobScheduler,JobIntent Service when ever we kill the application the service will stop and then it will Restart.
+Suppose we don t want the service to get stopped,we want the Service to run continously in the background.
+Then the best choice is foreground Service.
+
+2)Forground Service performs opertation which are noticable to the user.(via notification)
+
+Implement Forground Service:-
+-----------------------------
+1)Add permission in the manifest
+uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+2)Declare foregroundServiceType in manifest
+       <service
+            android:name=".MyServiceDemo"
+            android:foregroundServiceType="dataSync" />
+
+Note:-Even though the we wont provide the foregroundServiceType in the manifest the service will run.
+But as per the documentation we need to provide it.
+
+We can use dataSync most the time,As it will work.If we are not doing anything complicated with respect to Media.
+
+3)
+startForeground(1, getNotification());
+Should be called inside the service,when we start the service.
+4)
+We can start the service using.
+ContextCompat.startForegroundService(this,serviceDemoIntent);
+
 
 */
