@@ -33,12 +33,14 @@ public class MyServiceDemo extends JobService {
     private boolean mIsRandomGeneratorOn;
 
 
+    JobParameters jobParameters;
     @Override
     public boolean onStartJob(JobParameters params) {
         /**
          * Logic implemented in this method by default will Run on the MainThread/UI Thread.
          */
         Log.d(TAG, "onStartJob: Thread ID= " + Thread.currentThread().getId());
+        this.jobParameters=params;
         doBackgroundWork();
         return true;
     }
@@ -69,19 +71,25 @@ public class MyServiceDemo extends JobService {
     }
 
 
-    private void startRandomNumberGenerator() {
-        while (mIsRandomGeneratorOn) {
-            try {
-                Thread.sleep(1000); //making Thread to sleep for one Seconds.So that Random generation Number will not be fast.
-                if (mIsRandomGeneratorOn) {
-                    mRandomNumber = new Random().nextInt(MAX) + MIN;
-                    Log.d(TAG, "startRandomNumberGenerator Thread id: " + Thread.currentThread().getId() + ", Random Number: " + mRandomNumber);
+    private void startRandomNumberGenerator(){
+        int counter=0;
+        while (counter<5){
+            try{
+                Thread.sleep(1000);
+                if(mIsRandomGeneratorOn){
+                    mRandomNumber =new Random().nextInt(MAX)+MIN;
+                    Log.d(TAG,"Thread id: "+Thread.currentThread().getId()+ ", Random Number: "+ mRandomNumber+"" + "jobId: "+jobParameters.getJobId());
                 }
-            } catch (InterruptedException e) {
-                Log.d(TAG, "Thread Interrupted");
+            }catch (InterruptedException e){
+                Log.d(TAG,"Thread Interrupted");
             }
+            counter++;
         }
-
+        /**
+         * After log ing the Random Number 5 times,the service will stop.
+         * And ReSchedule it again.
+         */
+        this.jobFinished(jobParameters,true);
     }
 
     public int getRandomNumber() {

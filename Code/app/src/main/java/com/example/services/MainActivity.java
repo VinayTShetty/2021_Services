@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Android always recomends to use explicit intent to start the Service.
      */
-   // private Intent serviceIntent;
     TextView random_number_TextView;
     JobScheduler jobScheduler;
     private int JOB_ID=101;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // intializeService();
         intiazeViews();
         intializeJobScheduler();
     }
@@ -44,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void intiazeViews() {
         random_number_TextView=(TextView)findViewById(R.id.random_number_TextView_Id);
-    }
-
-    private void intializeService() {
-     //   serviceIntent=new Intent(this,MyServiceDemo.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -98,4 +92,6 @@ JobScheduler/JobService
 1)onStartJob method will get called as soon as the service gets called.
 2)Add BIND_JOB_SERVICE to the Manifest file for the Service Tag.
 3)When we stop the service explicity by calling (jobScheduler.cancel(JOB_ID)) it wont reschedule again.
+4)Stopping the JobScheduler after a running a particular at task.
+
 */
