@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Enqueing all the works one aftet the other
          */
+        //Note:- chain ing the same work will not eecute i guesss..Previous commmit is not working..(Commit name:-Test case of Canceling WorkRequest when before completing the previous workRequest.)
         WorkManager.getInstance(getApplicationContext()).beginWith(Arrays.asList(workRequest1,workRequest2)).then(workRequest2).then(workRequest3).enqueue();
     }
 
