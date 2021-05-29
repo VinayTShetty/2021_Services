@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Enqueing all the works one aftet the other
          */
-        WorkManager.getInstance(getApplicationContext()).beginWith(Arrays.asList(workRequest1,workRequest2)).then(workRequest3).enqueue();
+        WorkManager.getInstance(getApplicationContext()).beginWith(Arrays.asList(workRequest1,workRequest2)).then(workRequest2).then(workRequest3).enqueue();
     }
 
     public void stopService(View view) {
@@ -100,5 +100,15 @@ If we are enqueing
  Work Request chaining is allowed only for OneTimeWorkRequest.
  Periodic WorkRequest chaning is not yet given any documentation to execute.
 
+
+ Test Case:-
+
+ WorkManager.getInstance(getApplicationContext()).beginWith(Arrays.asList(workRequest1,workRequest2)).then(workRequest2).then(workRequest3).enqueue();
+
+ workRequest1 and workRequest2 will run in parallel
+ then workRequest2 will execute,
+ later workRequest3 will execute at the end.
+ After executing workRequest1 and workRequest2 if user cancels workRequest2,then workRequest3 will not execute bcoz workRequest3 will execute only after workRequest2 is finished.
+ but workRequest2 is not completed.(Due to cancellation).so workRequest3 won t be executed.
 
 */
