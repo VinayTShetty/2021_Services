@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String COMMON_TAG="COMMON_TAG "+APPLICATION_TAG;
     private static final String TAG=COMMON_TAG;
 
-    private WorkRequest workRequest;
     private WorkManager workManager;
+    private OneTimeWorkRequest workRequest1, workRequest2, workRequest3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
         workManager = WorkManager.getInstance(getApplicationContext());
     }
     private void intializeWorkRequestManager(){
-        //workRequest = OneTimeWorkRequest.from(RandomNumberGeneratorWorker.class);     // Using OneTimeWorkRequest also is possible.
-        workRequest = new PeriodicWorkRequest.Builder(RandomNumberGeneratorWorker.class, 15, TimeUnit.MINUTES).build();
+        workRequest1 = new OneTimeWorkRequest.Builder(RandomNumberGeneratorWorker1.class).addTag("worker1").build();
+        workRequest2 = new OneTimeWorkRequest.Builder(RandomNumberGeneratorWorker2.class).addTag("worker2").build();
+        workRequest3 = new OneTimeWorkRequest.Builder(RandomNumberGeneratorWorker3.class).addTag("worker3").build();
     }
 
 
@@ -51,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
     public void startService(View view) {
         Log.d(TAG, "startService: Thread ID= "+Thread.currentThread().getId());
         /**
-         * To start the background task use
-         * workManager.enqueue(workRequest);
+         * Enqueing all the works one aftet the other
          */
-        workManager.enqueue(workRequest);
+        WorkManager.getInstance(getApplicationContext()).beginWith(workRequest1).then(workRequest2).then(workRequest3).enqueue();
     }
 
     public void stopService(View view) {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
          * we can cancel the work by many ways.
          *  In this example we are cancelling the work using Id.
          */
-        workManager.cancelWorkById(workRequest.getId());
+        workManager.cancelAllWorkByTag("worker3");
     }
 }
 
@@ -77,84 +77,27 @@ https://docs.google.com/document/d/1it6NAM5izAovZzufaKGVemZ884ibT730QsDJOfFOrCs/
 Work manager:-
 ==============
 
-Services Summary:-
------------------
+Executing Work Managers Parallely.
+---------------------------------
+Pic is posted in the notes
 
-1)Services
-2)Intent Service
-3)JobIntentService
-4)JobScheduler/JobService
-5)ForegroundServices
+WorkManager Enqueing logic:-
+If we are enqueing
 
-Pre-Oreo Services
-----------------
-Services
-Intent Service
+ example:-
+ WorkManager.getInstance(getApplicationContext()).beginWith(workRequest1).then(workRequest2).then(workRequest3).enqueue();
 
-Post Oreo Services
-------------------
-JobIntentService
-JobScheduler/JobService
-ForegroundServices
+ workRequest1--->Executes frist
+ workRequest2--->Executes second
+ workRequest3--->Executes third
 
+ Suppose assume  workRequest2 is in process and user cancelled  workRequest2.
+ Then  workRequest3 won t be executed.
+ workRequest3 will execute only after  workRequest2 is comppleted.
 
-Workmanager Definition:-An API that makes easy to schedule deferable,asynchronous task that are expected to run reliably.
+ Note:-
+ Work Request chaining is allowed only for OneTimeWorkRequest.
+ Periodic WorkRequest chaning is not yet given any documentation to execute.
 
-Definition Meaning:-
-
-deferable i.e
-*************
-A very Controlled type mechanism.(Scheduled Mechanism)
-Run one time
-Run Mulitple Time
-Compact with Doze Mode,Power Saving Mode
-
-reliably
-********
-Run only when the Device is connected to Wifi.
-when the device is idle
-when the Device has sufficient storage space
-
-Always finish the work started.
-------------------------------
-Even if app exits
-Even if app restarts.
-
-asynchronous task
-*****************
-Something that run s in the backgroud.
-
-Implementation of WorkManager:-
-+++++++++++++++++++++++++++++++
-1)
-extend a class Worker
-after extending a class we will be having a callback methods
-doWork()
-onStoped()
-
-doWork():- This will be executed when we start the work.
-onStoped():-This will be executed when we stop the work
-
-2)
-We use Constraint API,where we declare all the  Constraints.
-a)Network Type
-b)Battery Low
-c)Requires Charging
-d)Device idle
-f)Storage Low
-h)Time Constraint :-Minimum we should give 15 mins.(Even in JobScheduler Minimum time interval is 15 mins).
-
-3)
-Workrequest:-Its a abstract class which contains lots of Configuration like
-a)oneTimeWorkRequest()
-b)PeriodicWorkRequest()
-
-4)
-WorkManager:-
-1)EnqueUeing the work
-2)Cancelling the work
-
-
-Summary:-With Work manager we can make assurane that,work will run as per the setting provided.
 
 */
