@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Enqueing all the works one aftet the other
          */
-        WorkManager.getInstance(getApplicationContext()).beginWith(workRequest1).then(workRequest2).then(workRequest3).enqueue();
+        WorkManager.getInstance(getApplicationContext()).beginWith(Arrays.asList(workRequest1,workRequest2)).then(workRequest3).enqueue();
     }
 
     public void stopService(View view) {
